@@ -2,6 +2,7 @@
 
 namespace spec\Knp\FriendlyContexts\Context;
 
+use Nelmio\Alice\Loader\NativeLoader;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
@@ -27,9 +28,9 @@ class AliceContextSpec extends ObjectBehavior
         $scenario->getTags()->willReturn([ 'alice(User)' ]);
         $event->getFeature()->willReturn($feature);
         $event->getScenario()->willReturn($scenario);
-        $loader->load('user.yml')->willReturn([]);
-        $loader->load('product.yml')->willReturn([]);
-        $loader->load('place.yml')->willReturn([]);
+        $loader->loadFile('user.yml');
+        $loader->loadFile('product.yml');
+        $loader->loadFile('place.yml');
         $loader->getCache()->willReturn([]);
         $loader->clearCache()->willReturn(null);
         $fixtures = [ 'User' => 'user.yml', 'Product' => 'product.yml', 'Place' => 'place.yml' ];
@@ -58,9 +59,9 @@ class AliceContextSpec extends ObjectBehavior
     {
         $manager->flush()->shouldBeCalled();
 
-        $loader->load('user.yml')->shouldBeCalled();
-        $loader->load('place.yml')->shouldBeCalled();
-        $loader->load('product.yml')->shouldNotBeCalled();
+        $loader->loadFile('user.yml')->shouldBeCalled();
+        $loader->loadFile('place.yml')->shouldBeCalled();
+        $loader->loadFile('product.yml')->shouldNotBeCalled();
 
         $this->loadAlice($event);
     }
@@ -70,9 +71,9 @@ class AliceContextSpec extends ObjectBehavior
         $scenario->getTags()->willReturn([ 'alice(*)' ]);
         $manager->flush()->shouldBeCalled();
 
-        $loader->load('user.yml')->shouldBeCalled();
-        $loader->load('place.yml')->shouldBeCalled();
-        $loader->load('product.yml')->shouldBeCalled();
+        $loader->loadFile('user.yml')->shouldBeCalled();
+        $loader->loadFile('place.yml')->shouldBeCalled();
+        $loader->loadFile('product.yml')->shouldBeCalled();
 
         $this->loadAlice($event);
     }
@@ -82,9 +83,9 @@ class AliceContextSpec extends ObjectBehavior
         $scenario->getTags()->willReturn([]);
         $manager->flush()->shouldBeCalled();
 
-        $loader->load('user.yml')->shouldBeCalled();
-        $loader->load('place.yml')->shouldBeCalled();
-        $loader->load('product.yml')->shouldNotBeCalled();
+        $loader->loadFile('user.yml')->shouldBeCalled();
+        $loader->loadFile('place.yml')->shouldBeCalled();
+        $loader->loadFile('product.yml')->shouldNotBeCalled();
 
         $deps = [ 'Place' => [ 'User' ] ];
         $container->getParameter('friendly.alice.dependencies')->willReturn($deps);
@@ -98,9 +99,9 @@ class AliceContextSpec extends ObjectBehavior
         $scenario->getTags()->willReturn([]);
         $manager->flush()->shouldBeCalled();
 
-        $loader->load('user.yml')->shouldBeCalled();
-        $loader->load('place.yml')->shouldBeCalled();
-        $loader->load('product.yml')->shouldNotBeCalled();
+        $loader->loadFile('user.yml')->shouldBeCalled();
+        $loader->loadFile('place.yml')->shouldBeCalled();
+        $loader->loadFile('product.yml')->shouldNotBeCalled();
 
         $deps = [ 'Place' => [ 'User' ], 'User' => [ 'Place' ] ];
         $container->getParameter('friendly.alice.dependencies')->willReturn($deps);
